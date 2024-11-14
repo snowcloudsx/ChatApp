@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Time Chat App</title>
+    <!--<link rel="stylesheet" href="style.css"> -->
+</head>
+<body>
+    <div class="container">
+        <h1 class="logo">Chat Room</h1>
+        <form class="form" id="form">
+            <input class="input" type="text" placeholder="Name" id="myname">
+            <input class="input" type="text" placeholder="Messages" id="message">
+            <button class="button">Send Message</button>
+        </form>
+        <!--Msg container-->
+        <div class="messageArea" id="messageArea"></div>
+
+
+        <!--              Simple Scripts                   -->
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            let socket = io();
+            let form = document.getElementById('form');
+            let myName = document.getElementById('myname');
+            let message = document.getElementById('message');
+            let MsgArea = document.getElementById('messageArea')
+
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                if(message.value) {
+                    socket.emit('send name', myName.value);
+                    socket.emit('send message', message.value);
+                    message.value = '';
+                     
+                }
+            });
+
+            socket.on('send name', (username) => {
+                let name = document.createElement('p');
+                name.classList.add('message');
+                name.innerHTML = `<span class="username">${username} :</span>`;
+                MsgArea.appendChild(name);
+            });
+
+            socket.on('send message', (chat) => {
+                let chatContent = document.createElement('p');
+                chatContent.classList.add('message'); 
+                chatContent.textContent = chat;
+                MsgArea.appendChild(chatContent);
+
+            });
+
+        </script>
+
+
+
+    </div>
+</body>
+</html>

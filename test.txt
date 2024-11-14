@@ -1,0 +1,3 @@
+rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.env' \
+-e "ssh -i Newhampshire-key-windows.pem" \
+. ubuntu@ip-172-31-17-218:~/app
